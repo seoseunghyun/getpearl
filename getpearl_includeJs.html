@@ -1,0 +1,246 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<div gp:group="ssh2">da</div>
+		<input gp:group="ssh2" value="" gp:id="rel" />
+		<input gp:group="ssh2" value="" gp:id="test1" />
+		<input gp:group="ssh2" value="" gp:id="test3" />
+		<input gp:group="ssh2" value="" gp:id="test2" gp:async="client" />
+		<input gp:group="ssh2" value="" gp:id="test5" />
+	</body>
+</html>
+<script>
+(function(){
+	
+	// 전역 GETPEARL 객체
+	var GETPEARL = function(id){
+		var this_ = this;
+		this.id = id;
+		this.coreUrl = 'http://seunghyun.net/brand/gp/core.js';
+		this.content = {};
+		
+		this.constructor();
+		
+		
+		// 셀렉터 정의 ( 셀렉터 타입 , 셀렉터 )
+		GP = function( _type , _selector )
+		{
+			
+			var return_ = null;
+			for(var i in this_.content)
+			{
+				for(var j in this_.content[i])
+				{
+					var gpObj_ = this_.content[i][j];
+					
+					// 셀렉터가 id일 경우
+					if( _type == 'id' && gpObj_.attr('id') == _selector )
+					{
+						return_ = gpObj_;
+					}
+					
+					// 셀렉터가 group일 경우
+					if( _type == 'group' && gpObj_.attr('group') == _selector )
+					{
+						if( return_ == null ) { return_ = []; }
+						return_.push( gpObj_ );
+					}
+					
+				}
+			}
+			
+			return return_;
+			
+		}
+	
+		
+	}
+	
+	GETPEARL.prototype = {
+		
+		// 생성자
+		constructor : function(){
+			// Document div 수집
+			var docDivs_ = document.getElementsByTagName('div');
+			
+			for(var i = 0; i < docDivs_.length; i++)
+			{
+				var docDivsId_ = docDivs_[i].getAttribute('gp:group');
+				
+				if(this.content[docDivsId_] === undefined)
+				{
+					this.content[docDivsId_] = [];
+				}
+				
+				this.gpAttrInit( docDivs_[i] );
+				
+				var gpObj_ = {
+					type : 'div',
+					obj : docDivs_[i]
+				}
+				
+				this.eventBinder( gpObj_ );
+				this.syncMudule( gpObj_ );
+				
+				this.content[docDivsId_].push( gpObj_ );
+				
+				
+				 
+			}
+			
+			// Document input 수집
+			var docInputs_ = document.getElementsByTagName('input');
+			
+			for(var i = 0; i < docInputs_.length; i++)
+			{
+				var docInputsId_ = docInputs_[i].getAttribute('gp:group');
+				
+				if(this.content[docInputsId_] === undefined)
+				{
+					this.content[docInputsId_] = [];
+				}
+				
+				this.gpAttrInit( docInputs_[i] );
+				
+				var gpObj_ = {
+					type : 'input',
+					obj : docInputs_[i]
+				}
+				
+				this.eventBinder( gpObj_ );
+				this.syncMudule( gpObj_ );
+
+				this.content[docInputsId_].push( gpObj_ );
+				
+			}
+			
+		},
+		
+		// 객체에 gp속성을 부여할 때 초기화 한다.
+		gpAttrInit : function( _obj )
+		{
+			
+			var initVars_ = {
+				id : '',
+				async : 'server' // or client
+			}
+			
+			if( _obj.getAttribute('gp:async') == null ) {
+				_obj.setAttribute('gp:async', initVars_.async);
+			}
+			if( _obj.getAttribute('gp:id') == null ) {
+				_obj.setAttribute('gp:id', initVars_.id);
+			}
+		},
+		
+		// 이벤트 부여를 위한 이벤트 바인더 ( gp객체 )
+		eventBinder : function( _gpObj )
+		{
+			_gpObj.attr = function( _attrKey , _attrValue )
+			{
+				
+				var return_;
+
+				switch( _attrKey )
+				{
+					case 'id': 
+						if( _attrValue ){
+							_gpObj.obj.setAttribute('gp:id', _attrValue )
+						}
+						
+						return_ = _gpObj.obj.getAttribute('gp:id');
+					break;
+					
+					case 'group':
+						if( _attrValue ){
+							_gpObj.obj.setAttribute('gp:group', _attrValue )
+						}
+						return_ = _gpObj.obj.getAttribute('gp:group');
+					break;
+					
+					case 'async':
+						if( _attrValue ){
+							_gpObj.obj.setAttribute('gp:async', _attrValue )
+						}
+						return_ = _gpObj.obj.getAttribute('gp:async');
+					break;
+					
+					case 'bgColor':
+						_gpObj.obj.style.backgroundColor = _attrValue;
+						return_ = _gpObj;
+					break;
+					
+					case 'type':
+						return_ = _gpObj.type;
+					break;
+					
+					case 'data' :
+					
+						switch( _gpObj.type )
+						{
+							case 'div':
+								if( _attrValue ){
+									_gpObj.obj.innerHTML = _attrValue;
+								}
+								return_ = _gpObj.obj.innerHTML;
+							break;
+							
+							case 'input':
+								if( _attrValue ){
+									_gpObj.obj.value = _attrValue;
+								}
+								return_ = _gpObj.obj.value;
+							break;
+						}
+						
+					break;
+				}
+				
+				return return_;
+			}
+		},
+		
+		// 동기화를 위한 모듈러 ( gp객체 )
+		syncMudule : function( _gpObj )
+		{
+			
+			switch( _gpObj.type )
+			{
+				case 'div' :
+					_gpObj.obj
+				break;
+				
+				case 'input' :
+					_gpObj.obj.addEventListener('keydown', function(){
+						
+						if(_gpObj.attr('async') == 'server'){
+							var gpGroups_ = GP( 'group' , _gpObj.attr('group') );
+							for( var i in gpGroups_ )
+							{
+								if( _gpObj != gpGroups_[i] ){
+									gpGroups_[i].attr( 'data' , _gpObj.attr('data') );
+								}
+							}
+						}
+					})
+				break;
+			}
+		}
+/*
+		reloadJs : function() {
+        	$('script[src="' + coreUrl + '"]').remove();
+        	$('<script>').attr('src', coreUrl).appendTo('head');
+	    }
+*/
+	}
+	var ab = new GETPEARL(); 
+	
+	for(var i in GP('group', 'ssh2'))
+	{
+		console.log(GP('group', 'ssh2')[i].attr('id'))
+	}
+
+	
+})();
+</script>
