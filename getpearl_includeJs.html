@@ -219,7 +219,23 @@
 						return 'cubic-bezier(0.250, 0.460, 0.450, 0.940)';
 					break;
 					
+					case 'easeInOutQuad' :
+						return 'cubic-bezier(0.455, 0.030, 0.515, 0.955)';
+					break;
+					
+					case 'easeInCubic' :
+						return 'cubic-bezier(0.550, 0.055, 0.675, 0.190)';
+					break;
+					
+					case 'easeOutCubic' :
+						return 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
+					break;
+					
 					case 'easeOutBack' :
+						return 'cubic-bezier(0.175, 0.885, 0.320, 1.275)';
+					break;
+					
+					default:
 						return 'cubic-bezier(0.175, 0.885, 0.320, 1.275)';
 					break;
 				}
@@ -396,12 +412,6 @@
 				break;
 			}
 		}
-/*
-		reloadJs : function() {
-        	$('script[src="' + coreUrl + '"]').remove();
-        	$('<script>').attr('src', coreUrl).appendTo('head');
-	    }
-*/
 	}
 	var ab = new GETPEARL(); 
 	
@@ -410,14 +420,8 @@
 		console.log(GP('group', 'ssh2')[i].attr('id'))
 	}
 	
-	GP('id','test1').move('scale(2)','3s','easeOutBack');
+	GP('id','test1').move('scale(2) rotate(15deg)','300ms','easeOutBack');
 	
 	
 })();
 </script>
-<!--
-<script src="gp_animation.js"></script>
-<script>
-move('#a').ease('in').x(400).end();
-</script>
--->
