@@ -125,6 +125,34 @@
 				 
 			}
 			
+			// Document span 수집
+			var docSpans_ = document.getElementsByTagName('span');
+			
+			for(var i = 0; i < docSpans_.length; i++)
+			{
+				var docSpansId_ = docSpans_[i].getAttribute('gp-group');
+				
+				if(this.content[docSpansId_] === undefined)
+				{
+					this.content[docSpansId_] = [];
+				}
+				
+				this.gpAttrInit( docSpans_[i] );
+				
+				var gpObj_ = {
+					type : 'span',
+					obj : docSpans_[i]
+				}
+				
+				this.eventBinder( gpObj_ );
+				this.syncMudule( gpObj_ );
+				
+				this.content[docSpansId_].push( gpObj_ );
+				
+				
+				 
+			}
+			
 			// Document input 수집
 			var docInputs_ = document.getElementsByTagName('input');
 			
@@ -262,11 +290,11 @@
 					break;
 				}
 			}
-			_gpObj.move = function( transform , time , easing ){
-				var a = '<style>[gp-id="test2"] {transform-style: preserve-3d;-webkit-transition:'+time+' '+easingFunc_(easing)+'; -webkit-transform: '+transform+';}</style>';
+			_gpObj.move = function( type , transform , time , easing ){
+				var tmpStyle = '<style>[gp-'+type+'="'+_gpObj.attr(type)+'"] {transform-style: preserve-3d; -webkit-transition:'+time+' '+easingFunc_(easing)+'; -webkit-transform: '+transform+';}</style>';
 					
 					setTimeout(function(){
-						document.head.innerHTML += a;						
+						document.head.innerHTML += tmpStyle;						
 					}, 1000)
 
 					
@@ -387,6 +415,13 @@
 								return_ = _gpObj.obj.innerHTML;
 							break;
 							
+							case 'span':
+								if( _attrValue ){
+									_gpObj.obj.innerHTML = _attrValue;
+								}
+								return_ = _gpObj.obj.innerHTML;
+							break;
+							
 							case 'input':
 								if( _attrValue ){
 									_gpObj.obj.value = _attrValue;
@@ -409,6 +444,10 @@
 			switch( _gpObj.type )
 			{
 				case 'div' :
+					_gpObj.obj
+				break;
+				
+				case 'span' :
 					_gpObj.obj
 				break;
 				

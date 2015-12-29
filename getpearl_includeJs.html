@@ -15,9 +15,13 @@
 		<input gp-group="ssh1" value="" gp-id="test3" />
 		<input gp-group="ssh1" value="" gp-id="test2" gp-async="client" />
 		<input gp-group="ssh1" value="" gp-id="test5" />
+		<br><br><br><br><br>
+		<span gp-group="ssh2"></span>
 	</body>
 </html>
 <script src="gp.js"></script>
 <script>
-GP('id','test1').move('scale(2) rotate(15deg)','300ms','easeOutBack');
-</script>
+//GP('id','test1').move('scale(2) rotate(15deg)','300ms','easeOutBack');
+
+GP('group','ssh1')[0].move('id','scale(1.5) rotate(25deg) translate(100px)','800ms','easeInBack');
+</script> 
