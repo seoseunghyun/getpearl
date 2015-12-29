@@ -7,6 +7,8 @@ Getpearl Library is javascript library
   - homepage : http://seunghyun.net
   - Category : Javascript & CSS3 & HTML5
 
+![Getpearl License](http://seunghyun.net/brand/getpearl/logo.png)
+
 > Variable & Function Rule.
 > _* : Parameter Variable or Function
 > *_ : Temp Variable or Function (count of underbar is mean Depth)
